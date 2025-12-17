@@ -1,0 +1,17 @@
+import cv2
+import numpy as np
+
+image = cv2.imread("C:/CV EXP/image.jpeg")
+rows, cols = image.shape[:2]
+
+f = max(rows, cols)
+src_pts = np.float32([[0,0],[cols-1,0],[cols-1,rows-1],[0,rows-1]])
+dst_pts = np.float32([[cols-1,0],[cols-1,rows-1],[0,rows-1],[0,0]])
+
+matrix = cv2.getPerspectiveTransform(src_pts, dst_pts)
+rotated = cv2.warpPerspective(image, matrix, (cols, rows))
+
+cv2.imshow("Original Image", image)
+cv2.imshow("90-Degree Y-Axis Rotation", rotated)
+cv2.waitKey(0)
+cv2.destroyAllWindows()

@@ -1,0 +1,11 @@
+import cv2
+
+img = cv2.imread('image.jpeg')
+roi = img[100:200, 100:200]
+h, w = roi.shape[:2]
+y_offset, x_offset = 10, 10
+img[y_offset:y_offset+h, x_offset:x_offset+w] = roi
+cv2.imshow('Result', img)
+cv2.imwrite('roi_image.jpg', img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()

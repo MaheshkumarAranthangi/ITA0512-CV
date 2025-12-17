@@ -1,0 +1,25 @@
+import cv2
+
+net = cv2.dnn.readNet("yolov3.weights","yolov3.cfg")
+classes = open("coco.names").read().strip().split("\n")
+img = cv2.imread("image1.jpeg")
+h,w = img.shape[:2]
+
+blob = cv2.dnn.blobFromImage(img,1/255,(416,416),swapRB=True)
+net.setInput(blob)
+out = net.forward(net.getUnconnectedOutLayersNames())
+
+for o in out:
+    for d in o:
+        scores = d[5:]
+        c = scores.argmax()
+        conf = scores[c]
+        if conf > 0.5 and classes[c] == "clock":
+            box = d[0:4]*[w,h,w,h]
+            x,y,bw,bh = box.astype("int")
+            x -= bw//2; y -= bh//2
+            cv2.rectangle(img,(x,y),(x+bw,y+bh),(0,255,0),2)
+
+cv2.imshow("output",img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()

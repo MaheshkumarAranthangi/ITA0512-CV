@@ -1,0 +1,26 @@
+import cv2
+import pytesseract
+
+pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\tesseract.exe"
+cap = cv2.VideoCapture("C:/CV EXP/video1.mp4")
+frame_count = 0
+text_results = []
+
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        break
+    frame_count += 1
+    if frame_count % 10 != 0:
+        continue
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    text = pytesseract.image_to_string(gray)
+    if text.strip():
+        print(f"Frame {frame_count}:\n{text}\n{'-'*50}")
+        text_results.append((frame_count, text.strip()))
+
+cap.release()
+
+with open("video_text_output.txt", "w", encoding="utf-8") as f:
+    for frame_num, txt in text_results:
+        f.write(f"Frame {frame_num}:\n{txt}\n{'-'*50}\n")

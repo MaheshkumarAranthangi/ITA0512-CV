@@ -1,0 +1,37 @@
+import cv2
+
+# Load image
+img = cv2.imread(r"C:\CV EXP\image3.jpeg")  # full path
+if img is None:
+    print("Image not found! Check filename and path.")
+    exit()
+
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+# Load Haar cascades
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+smile_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_smile.xml')
+
+# Detect faces
+faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(80, 80))
+
+for (x, y, w, h) in faces:
+    roi_gray = gray[y:y+h, x:x+w]
+    roi_color = img[y:y+h, x:x+w]
+    
+    # Detect smiles within face region
+    smiles = smile_cascade.detectMultiScale(
+        roi_gray,
+        scaleFactor=1.5,
+        minNeighbors=15,
+        minSize=(25,25)
+    )
+    
+    if len(smiles) > 0:
+        cv2.putText(roi_color, "SMILE", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0), 2)
+        for (sx, sy, sw, sh) in smiles:
+            cv2.rectangle(roi_color, (sx, sy), (sx+sw, sy+sh), (0, 255, 0), 2)
+
+cv2.imshow('Smile Detection', img)
+cv2.waitKey(0)
+cv2.destroyAllWindows()

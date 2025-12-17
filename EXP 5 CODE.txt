@@ -1,0 +1,29 @@
+import cv2
+import matplotlib.pyplot as plt
+
+def analyze_color_histogram(image_path):
+    image = cv2.imread(image_path)
+    if image is None:
+        print("Error: Image not found.")
+        return
+    image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    channels = cv2.split(image)
+    colors = ('b', 'g', 'r')
+    plt.figure(figsize=(12, 5))
+    plt.subplot(1, 2, 1)
+    plt.imshow(image_rgb)
+    plt.title('Original Image')
+    plt.axis('off')
+    plt.subplot(1, 2, 2)
+    for chan, color in zip(channels, colors):
+        hist = cv2.calcHist([chan], [0], None, [256], [0, 256])
+        plt.plot(hist, color=color)
+        plt.xlim([0, 256])
+    plt.title('Color Histograms')
+    plt.xlabel('Pixel Intensity')
+    plt.ylabel('Frequency')
+    plt.legend(colors)
+    plt.tight_layout()
+    plt.show()
+
+analyze_color_histogram("C:/CV EXP/image.jpeg")

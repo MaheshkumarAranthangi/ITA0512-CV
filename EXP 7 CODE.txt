@@ -1,0 +1,21 @@
+import cv2
+
+cap = cv2.VideoCapture("C:/CV EXP/video.mp4")
+
+while cap.isOpened():
+    ret, frame = cap.read()
+    if not ret:
+        break
+    cv2.imshow("Original Video", frame)
+    
+    # Slow motion
+    cv2.imshow("Slow Motion", frame)
+    if cv2.waitKey(100) & 0xFF == ord('q'):  
+        break
+
+    cv2.imshow("Fast Motion", frame)
+    if cv2.waitKey(10) & 0xFF == ord('q'):  # 10ms delay
+        break
+
+cap.release()
+cv2.destroyAllWindows()

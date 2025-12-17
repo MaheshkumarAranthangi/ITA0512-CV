@@ -1,0 +1,13 @@
+import cv2
+
+image = cv2.imread("C:/CV EXP/image.jpeg")
+height, width = image.shape[:2]
+
+bigger = cv2.resize(image, (int(width*1.5), int(height*1.5)), interpolation=cv2.INTER_LINEAR)
+smaller = cv2.resize(image, (int(width*0.5), int(height*0.5)), interpolation=cv2.INTER_AREA)
+
+cv2.imshow("Original Image", image)
+cv2.imshow("Enlarged Image", bigger)
+cv2.imshow("Reduced Image", smaller)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
